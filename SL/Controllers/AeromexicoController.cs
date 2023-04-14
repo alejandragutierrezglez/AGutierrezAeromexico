@@ -60,7 +60,42 @@ namespace SL.Controllers
         {
             ML.Vuelo vuelo = new ML.Vuelo();           
 
-            ML.Result result = BL.Vuelo.GetAll(fechaInicio, fechaFin);
+            ML.Result result = BL.Vuelo.GetAllByFechas(fechaInicio, fechaFin);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Route("api/Aeromexico/GetAll/Vuelo")]
+        public IHttpActionResult VueloGetAll()
+        {
+            ML.Vuelo vuelo = new ML.Vuelo();
+
+            ML.Result result = BL.Vuelo.GetAll();
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("api/Aeromexico/GetAll/Pasajero")]
+        public IHttpActionResult PasajeroGetAll()
+        {
+            ML.Pasajero pasajero = new ML.Pasajero();
+
+            ML.Result result = BL.Pasajero.GetAll();
             if (result.Correct)
             {
                 return Ok(result);

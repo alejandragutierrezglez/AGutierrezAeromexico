@@ -9,6 +9,7 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Apellidos" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="PasajeroGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="UsuarioGetByUsername" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Username" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="varchar" Mode="In" />
@@ -17,6 +18,7 @@
           <Parameter Name="FechaInicio" Type="smalldatetime" Mode="In" />
           <Parameter Name="FechaFinal" Type="smalldatetime" Mode="In" />
         </Function>
+        <Function Name="VuelosGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="AGutierrezAeromexicoModelStoreContainer" />
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -35,6 +37,8 @@
             <Parameter Name="FechaInicio" Mode="In" Type="DateTime" />
             <Parameter Name="FechaFinal" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <FunctionImport Name="PasajeroGetAll" ReturnType="Collection(AGutierrezAeromexicoModel.PasajeroGetAll_Result)" />
+          <FunctionImport Name="VuelosGetAll" ReturnType="Collection(AGutierrezAeromexicoModel.VuelosGetAll_Result)" />
         </EntityContainer>
         <ComplexType Name="UsuarioGetByUsername_Result">
           <Property Type="Int32" Name="IdUsuario" Nullable="false" />
@@ -42,6 +46,18 @@
           <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
         </ComplexType>
         <ComplexType Name="VueloGetAll_Result">
+          <Property Type="Int32" Name="IdVuelo" Nullable="false" />
+          <Property Type="String" Name="NumeroVuelo" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="Origen" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Destino" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="FechaSalida" Nullable="true" Precision="16" />
+        </ComplexType>
+        <ComplexType Name="PasajeroGetAll_Result">
+          <Property Type="Int32" Name="IdPasajero" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="VuelosGetAll_Result">
           <Property Type="Int32" Name="IdVuelo" Nullable="false" />
           <Property Type="String" Name="NumeroVuelo" Nullable="true" MaxLength="4" />
           <Property Type="String" Name="Origen" Nullable="true" MaxLength="2" />
@@ -67,6 +83,26 @@
           <FunctionImportMapping FunctionImportName="VueloGetAll" FunctionName="AGutierrezAeromexicoModel.Store.VueloGetAll">
             <ResultMapping>
               <ComplexTypeMapping TypeName="AGutierrezAeromexicoModel.VueloGetAll_Result">
+                <ScalarProperty Name="IdVuelo" ColumnName="IdVuelo" />
+                <ScalarProperty Name="NumeroVuelo" ColumnName="NumeroVuelo" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+                <ScalarProperty Name="Destino" ColumnName="Destino" />
+                <ScalarProperty Name="FechaSalida" ColumnName="FechaSalida" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PasajeroGetAll" FunctionName="AGutierrezAeromexicoModel.Store.PasajeroGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AGutierrezAeromexicoModel.PasajeroGetAll_Result">
+                <ScalarProperty Name="IdPasajero" ColumnName="IdPasajero" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VuelosGetAll" FunctionName="AGutierrezAeromexicoModel.Store.VuelosGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AGutierrezAeromexicoModel.VuelosGetAll_Result">
                 <ScalarProperty Name="IdVuelo" ColumnName="IdVuelo" />
                 <ScalarProperty Name="NumeroVuelo" ColumnName="NumeroVuelo" />
                 <ScalarProperty Name="Origen" ColumnName="Origen" />

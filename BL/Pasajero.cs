@@ -39,5 +39,43 @@ namespace BL
 
             }
         }
+
+        public static ML.Result GetAll()
+        {
+            ML.Result result = new ML.Result();
+            {
+                try
+                {
+                    using (DL.AGutierrezAeromexicoEntities context = new DL.AGutierrezAeromexicoEntities())
+                    {
+                        var query = context.PasajeroGetAll().ToList();
+
+
+                        if (query != null)
+                        {
+                            result.Objects = new List<object>();
+
+                            foreach (var resultPasajero in query)
+                            {
+                                ML.Pasajero pasajero = new ML.Pasajero();
+                                pasajero.IdPasajero = resultPasajero.IdPasajero;
+                                pasajero.Nombre = resultPasajero.Nombre;
+                                pasajero.Apellidos = resultPasajero.Apellidos;
+
+                                result.Objects.Add(pasajero);
+                            }
+                            result.Correct = true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result.Correct = false;
+                    result.Ex = ex;
+                    result.ErrorMessage = ex.Message;
+                }
+                return result;
+            }
+        }
     }
 }

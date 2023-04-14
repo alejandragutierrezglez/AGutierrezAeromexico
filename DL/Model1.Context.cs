@@ -66,5 +66,15 @@ namespace DL
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VueloGetAll_Result>("VueloGetAll", fechaInicioParameter, fechaFinalParameter);
         }
+    
+        public virtual ObjectResult<PasajeroGetAll_Result> PasajeroGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<PasajeroGetAll_Result>("PasajeroGetAll");
+        }
+    
+        public virtual ObjectResult<VuelosGetAll_Result> VuelosGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VuelosGetAll_Result>("VuelosGetAll");
+        }
     }
 }

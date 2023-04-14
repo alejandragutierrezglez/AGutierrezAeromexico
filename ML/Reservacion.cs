@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace ML
 {
-    public class Pasajero
+    public class Reservacion
     {
-        public int IdPasajero { get; set; }
-        public string Nombre { get; set; }
-        public string Apellidos { get; set; }
+        public int IdReservacion { get; set; }
+        public ML.Pasajero Pasajero { get; set; }
         public ML.Vuelo Vuelo { get; set; }
     }
 }

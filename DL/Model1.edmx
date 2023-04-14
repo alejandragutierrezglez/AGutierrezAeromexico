@@ -4,12 +4,87 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="AGutierrezAeromexicoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AGutierrezAeromexicoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Pasajero">
+          <Key>
+            <PropertyRef Name="IdPasajero" />
+          </Key>
+          <Property Name="IdPasajero" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="100" />
+          <Property Name="IdVuelo" Type="int" />
+        </EntityType>
+        <EntityType Name="Reservacion">
+          <Key>
+            <PropertyRef Name="IdReservacion" />
+          </Key>
+          <Property Name="IdReservacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPasajero" Type="int" />
+          <Property Name="IdVuelo" Type="int" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Vuelo">
+          <Key>
+            <PropertyRef Name="IdVuelo" />
+          </Key>
+          <Property Name="IdVuelo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumeroVuelo" Type="varchar" MaxLength="4" />
+          <Property Name="Origen" Type="varchar" MaxLength="2" />
+          <Property Name="Destino" Type="varchar" MaxLength="2" />
+          <Property Name="FechaSalida" Type="smalldatetime" />
+        </EntityType>
+        <Association Name="FK__Pasajero__IdVuel__1A14E395">
+          <End Role="Vuelo" Type="Self.Vuelo" Multiplicity="0..1" />
+          <End Role="Pasajero" Type="Self.Pasajero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vuelo">
+              <PropertyRef Name="IdVuelo" />
+            </Principal>
+            <Dependent Role="Pasajero">
+              <PropertyRef Name="IdVuelo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reservaci__IdPas__20C1E124">
+          <End Role="Pasajero" Type="Self.Pasajero" Multiplicity="0..1" />
+          <End Role="Reservacion" Type="Self.Reservacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pasajero">
+              <PropertyRef Name="IdPasajero" />
+            </Principal>
+            <Dependent Role="Reservacion">
+              <PropertyRef Name="IdPasajero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reservaci__IdVue__21B6055D">
+          <End Role="Vuelo" Type="Self.Vuelo" Multiplicity="0..1" />
+          <End Role="Reservacion" Type="Self.Reservacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vuelo">
+              <PropertyRef Name="IdVuelo" />
+            </Principal>
+            <Dependent Role="Reservacion">
+              <PropertyRef Name="IdVuelo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="PasajeroAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="Apellidos" Type="varchar" Mode="In" />
         </Function>
         <Function Name="PasajeroGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ReservacionAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdPasajero" Type="int" Mode="In" />
+          <Parameter Name="IdVuelo" Type="int" Mode="In" />
+        </Function>
         <Function Name="UsuarioGetByUsername" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Username" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="varchar" Mode="In" />
@@ -19,7 +94,25 @@
           <Parameter Name="FechaFinal" Type="smalldatetime" Mode="In" />
         </Function>
         <Function Name="VuelosGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <EntityContainer Name="AGutierrezAeromexicoModelStoreContainer" />
+        <Function Name="VuelosPasajerosGetAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="AGutierrezAeromexicoModelStoreContainer">
+          <EntitySet Name="Pasajero" EntityType="Self.Pasajero" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reservacion" EntityType="Self.Reservacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vuelo" EntityType="Self.Vuelo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Pasajero__IdVuel__1A14E395" Association="Self.FK__Pasajero__IdVuel__1A14E395">
+            <End Role="Vuelo" EntitySet="Vuelo" />
+            <End Role="Pasajero" EntitySet="Pasajero" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reservaci__IdPas__20C1E124" Association="Self.FK__Reservaci__IdPas__20C1E124">
+            <End Role="Pasajero" EntitySet="Pasajero" />
+            <End Role="Reservacion" EntitySet="Reservacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reservaci__IdVue__21B6055D" Association="Self.FK__Reservaci__IdVue__21B6055D">
+            <End Role="Vuelo" EntitySet="Vuelo" />
+            <End Role="Reservacion" EntitySet="Reservacion" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -39,6 +132,27 @@
           </FunctionImport>
           <FunctionImport Name="PasajeroGetAll" ReturnType="Collection(AGutierrezAeromexicoModel.PasajeroGetAll_Result)" />
           <FunctionImport Name="VuelosGetAll" ReturnType="Collection(AGutierrezAeromexicoModel.VuelosGetAll_Result)" />
+          <FunctionImport Name="VuelosPasajerosGetAll" ReturnType="Collection(AGutierrezAeromexicoModel.VuelosPasajerosGetAll_Result)" />
+          <EntitySet Name="Pasajeroes" EntityType="AGutierrezAeromexicoModel.Pasajero" />
+          <EntitySet Name="Reservacions" EntityType="AGutierrezAeromexicoModel.Reservacion" />
+          <EntitySet Name="Usuarios" EntityType="AGutierrezAeromexicoModel.Usuario" />
+          <EntitySet Name="Vueloes" EntityType="AGutierrezAeromexicoModel.Vuelo" />
+          <AssociationSet Name="FK__Pasajero__IdVuel__1A14E395" Association="AGutierrezAeromexicoModel.FK__Pasajero__IdVuel__1A14E395">
+            <End Role="Vuelo" EntitySet="Vueloes" />
+            <End Role="Pasajero" EntitySet="Pasajeroes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reservaci__IdPas__20C1E124" Association="AGutierrezAeromexicoModel.FK__Reservaci__IdPas__20C1E124">
+            <End Role="Pasajero" EntitySet="Pasajeroes" />
+            <End Role="Reservacion" EntitySet="Reservacions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reservaci__IdVue__21B6055D" Association="AGutierrezAeromexicoModel.FK__Reservaci__IdVue__21B6055D">
+            <End Role="Vuelo" EntitySet="Vueloes" />
+            <End Role="Reservacion" EntitySet="Reservacions" />
+          </AssociationSet>
+          <FunctionImport Name="ReservacionAdd">
+            <Parameter Name="IdPasajero" Mode="In" Type="Int32" />
+            <Parameter Name="IdVuelo" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="UsuarioGetByUsername_Result">
           <Property Type="Int32" Name="IdUsuario" Nullable="false" />
@@ -64,6 +178,93 @@
           <Property Type="String" Name="Destino" Nullable="true" MaxLength="2" />
           <Property Type="DateTime" Name="FechaSalida" Nullable="true" Precision="16" />
         </ComplexType>
+        <ComplexType Name="VuelosPasajerosGetAll_Result">
+          <Property Type="Int32" Name="IdPasajero" Nullable="true" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Apellidos" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="IdVuelo" Nullable="true" />
+          <Property Type="String" Name="NumeroVuelo" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="Origen" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="Destino" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="FechaSalida" Nullable="true" Precision="16" />
+        </ComplexType>
+        <EntityType Name="Pasajero">
+          <Key>
+            <PropertyRef Name="IdPasajero" />
+          </Key>
+          <Property Name="IdPasajero" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdVuelo" Type="Int32" />
+          <NavigationProperty Name="Vuelo" Relationship="AGutierrezAeromexicoModel.FK__Pasajero__IdVuel__1A14E395" FromRole="Pasajero" ToRole="Vuelo" />
+          <NavigationProperty Name="Reservacions" Relationship="AGutierrezAeromexicoModel.FK__Reservaci__IdPas__20C1E124" FromRole="Pasajero" ToRole="Reservacion" />
+        </EntityType>
+        <EntityType Name="Reservacion">
+          <Key>
+            <PropertyRef Name="IdReservacion" />
+          </Key>
+          <Property Name="IdReservacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPasajero" Type="Int32" />
+          <Property Name="IdVuelo" Type="Int32" />
+          <NavigationProperty Name="Pasajero" Relationship="AGutierrezAeromexicoModel.FK__Reservaci__IdPas__20C1E124" FromRole="Reservacion" ToRole="Pasajero" />
+          <NavigationProperty Name="Vuelo" Relationship="AGutierrezAeromexicoModel.FK__Reservaci__IdVue__21B6055D" FromRole="Reservacion" ToRole="Vuelo" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Vuelo">
+          <Key>
+            <PropertyRef Name="IdVuelo" />
+          </Key>
+          <Property Name="IdVuelo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroVuelo" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="Origen" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="Destino" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="FechaSalida" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Pasajeroes" Relationship="AGutierrezAeromexicoModel.FK__Pasajero__IdVuel__1A14E395" FromRole="Vuelo" ToRole="Pasajero" />
+          <NavigationProperty Name="Reservacions" Relationship="AGutierrezAeromexicoModel.FK__Reservaci__IdVue__21B6055D" FromRole="Vuelo" ToRole="Reservacion" />
+        </EntityType>
+        <Association Name="FK__Pasajero__IdVuel__1A14E395">
+          <End Type="AGutierrezAeromexicoModel.Vuelo" Role="Vuelo" Multiplicity="0..1" />
+          <End Type="AGutierrezAeromexicoModel.Pasajero" Role="Pasajero" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vuelo">
+              <PropertyRef Name="IdVuelo" />
+            </Principal>
+            <Dependent Role="Pasajero">
+              <PropertyRef Name="IdVuelo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reservaci__IdPas__20C1E124">
+          <End Type="AGutierrezAeromexicoModel.Pasajero" Role="Pasajero" Multiplicity="0..1" />
+          <End Type="AGutierrezAeromexicoModel.Reservacion" Role="Reservacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pasajero">
+              <PropertyRef Name="IdPasajero" />
+            </Principal>
+            <Dependent Role="Reservacion">
+              <PropertyRef Name="IdPasajero" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reservaci__IdVue__21B6055D">
+          <End Type="AGutierrezAeromexicoModel.Vuelo" Role="Vuelo" Multiplicity="0..1" />
+          <End Type="AGutierrezAeromexicoModel.Reservacion" Role="Reservacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vuelo">
+              <PropertyRef Name="IdVuelo" />
+            </Principal>
+            <Dependent Role="Reservacion">
+              <PropertyRef Name="IdVuelo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -111,6 +312,60 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="VuelosPasajerosGetAll" FunctionName="AGutierrezAeromexicoModel.Store.VuelosPasajerosGetAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AGutierrezAeromexicoModel.VuelosPasajerosGetAll_Result">
+                <ScalarProperty Name="IdPasajero" ColumnName="IdPasajero" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="IdVuelo" ColumnName="IdVuelo" />
+                <ScalarProperty Name="NumeroVuelo" ColumnName="NumeroVuelo" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+                <ScalarProperty Name="Destino" ColumnName="Destino" />
+                <ScalarProperty Name="FechaSalida" ColumnName="FechaSalida" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Pasajeroes">
+            <EntityTypeMapping TypeName="AGutierrezAeromexicoModel.Pasajero">
+              <MappingFragment StoreEntitySet="Pasajero">
+                <ScalarProperty Name="IdVuelo" ColumnName="IdVuelo" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdPasajero" ColumnName="IdPasajero" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reservacions">
+            <EntityTypeMapping TypeName="AGutierrezAeromexicoModel.Reservacion">
+              <MappingFragment StoreEntitySet="Reservacion">
+                <ScalarProperty Name="IdVuelo" ColumnName="IdVuelo" />
+                <ScalarProperty Name="IdPasajero" ColumnName="IdPasajero" />
+                <ScalarProperty Name="IdReservacion" ColumnName="IdReservacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="AGutierrezAeromexicoModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vueloes">
+            <EntityTypeMapping TypeName="AGutierrezAeromexicoModel.Vuelo">
+              <MappingFragment StoreEntitySet="Vuelo">
+                <ScalarProperty Name="FechaSalida" ColumnName="FechaSalida" />
+                <ScalarProperty Name="Destino" ColumnName="Destino" />
+                <ScalarProperty Name="Origen" ColumnName="Origen" />
+                <ScalarProperty Name="NumeroVuelo" ColumnName="NumeroVuelo" />
+                <ScalarProperty Name="IdVuelo" ColumnName="IdVuelo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ReservacionAdd" FunctionName="AGutierrezAeromexicoModel.Store.ReservacionAdd" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

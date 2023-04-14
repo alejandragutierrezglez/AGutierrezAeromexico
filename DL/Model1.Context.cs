@@ -27,6 +27,10 @@ namespace DL
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Pasajero> Pasajeroes { get; set; }
+        public virtual DbSet<Reservacion> Reservacions { get; set; }
+        public virtual DbSet<Usuario> Usuarios { get; set; }
+        public virtual DbSet<Vuelo> Vueloes { get; set; }
     
         public virtual int PasajeroAdd(string nombre, string apellidos)
         {
@@ -75,6 +79,24 @@ namespace DL
         public virtual ObjectResult<VuelosGetAll_Result> VuelosGetAll()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VuelosGetAll_Result>("VuelosGetAll");
+        }
+    
+        public virtual ObjectResult<VuelosPasajerosGetAll_Result> VuelosPasajerosGetAll()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VuelosPasajerosGetAll_Result>("VuelosPasajerosGetAll");
+        }
+    
+        public virtual int ReservacionAdd(Nullable<int> idPasajero, Nullable<int> idVuelo)
+        {
+            var idPasajeroParameter = idPasajero.HasValue ?
+                new ObjectParameter("IdPasajero", idPasajero) :
+                new ObjectParameter("IdPasajero", typeof(int));
+    
+            var idVueloParameter = idVuelo.HasValue ?
+                new ObjectParameter("IdVuelo", idVuelo) :
+                new ObjectParameter("IdVuelo", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ReservacionAdd", idPasajeroParameter, idVueloParameter);
         }
     }
 }

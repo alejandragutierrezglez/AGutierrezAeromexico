@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-
-
+using System.Web.Http.Results;
 
 namespace SL.Controllers
 {
@@ -72,7 +71,7 @@ namespace SL.Controllers
         }
 
         [HttpGet]
-        [Route("api/Aeromexico/GetAll/Vuelo")]
+        [Route("api/Aeromexico/ReservacionVuelo/GetAll/Vuelo")]
         public IHttpActionResult VueloGetAll()
         {
             ML.Vuelo vuelo = new ML.Vuelo();
@@ -90,15 +89,16 @@ namespace SL.Controllers
 
 
         [HttpGet]
-        [Route("api/Aeromexico/GetAll/Pasajero")]
-        public IHttpActionResult PasajeroGetAll()
+        [Route("api/Aeromexico/ReservacionVuelo/GetAll/VuelosPasajeros")]
+        public IHttpActionResult VuelosPasajerosGetAll()
         {
             ML.Pasajero pasajero = new ML.Pasajero();
 
-            ML.Result result = BL.Pasajero.GetAll();
+            ML.Result result = BL.Pasajero.VueloPasajeroGetAll();
             if (result.Correct)
             {
                 return Ok(result);
+
             }
             else
             {
@@ -106,6 +106,26 @@ namespace SL.Controllers
             }
         }
 
+
+       
+        [HttpPost]
+        [Route("api/Aeromexico/ReservacionVuelo/{idPasajero}/{idVuelo}")]
+        public IHttpActionResult ReservacionVuelo(int idPasajero, int idVuelo)
+        {
+
+            ML.Pasajero pasajero = new ML.Pasajero();
+
+            ML.Result result = BL.Reservacion.ReservacionAdd(idPasajero, idVuelo);
+          
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return InternalServerError();
+            }
+        }
 
     }
 

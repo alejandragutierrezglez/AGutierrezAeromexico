@@ -4,7 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="80115c96742e4300a4f84ff42d9b06af" Name="Diagram1" />
+      <Diagram DiagramId="80115c96742e4300a4f84ff42d9b06af" Name="Diagram1" >
+        <EntityTypeShape EntityType="AGutierrezAeromexicoModel.Pasajero" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="AGutierrezAeromexicoModel.Reservacion" Width="1.5" PointX="5.25" PointY="1.125" />
+        <EntityTypeShape EntityType="AGutierrezAeromexicoModel.Usuario" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="AGutierrezAeromexicoModel.Vuelo" Width="1.5" PointX="0.75" PointY="1" />
+        <AssociationConnector Association="AGutierrezAeromexicoModel.FK__Pasajero__IdVuel__1A14E395" />
+        <AssociationConnector Association="AGutierrezAeromexicoModel.FK__Reservaci__IdPas__20C1E124" />
+        <AssociationConnector Association="AGutierrezAeromexicoModel.FK__Reservaci__IdVue__21B6055D" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
